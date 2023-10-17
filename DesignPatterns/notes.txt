@@ -1,0 +1,16 @@
+
+
+creational : class instantiation or object creation   for reusability
+
+structural : organize classes and objects to provide new functionality
+
+behavioural : identify common communication patterns
+
+
+
+Creational Patterns are concerned with the process of object creation. Common examples include the Singleton, Factory Method, Abstract Factory, Builder, and Prototype patterns.
+
+Behavioral Patterns are focused on how objects interact and communicate with one another. Examples include the Strategy, Observer, Command, and State patterns.
+
+Structural Patterns deal with the composition of classes or objects to form larger structures. Some common structural patterns include the Adapter, Decorator, Composite, and Proxy patterns.
+
