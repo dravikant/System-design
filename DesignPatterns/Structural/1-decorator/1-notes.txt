@@ -1,0 +1,4 @@
+adding new behaviour without altering structure/subclassing
+
+can add new members (data or methods) without changing interface
+

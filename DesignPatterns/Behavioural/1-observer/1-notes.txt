@@ -1,0 +1,48 @@
+
+object can observe another object
+
+can subscribe for events
+
+can get notifications
+
+can unsubscribe
+
+=========================
+
+one to many relationship i.e. all observers get noified when state changes
+
+
+
+==================
+
+problems:
+
+there is a single list/vector holding all subscribers(pointers)
+
+and we are accessing it subscribe notify and unsubscribe methods 
+
+--> these are not thread safe .. make sure to use something like mutex or lock before these methods
+
+
+--> if we call unsubscribe during notify we will run into busy loop
+    --> make pointer null or 
+
+--> if there is no getter available for the field
+
+    e.g. bool can_vote(){
+
+    }
+
+    void set_age(int age){
+
+        if(this->age == age){
+            return;
+        }
+        auto old_can_vote = get_can_vote();
+
+        this->age = age;
+
+        if(old_can_vote != get_can_vote()){
+            notify(*this,"can_vote");
+        }
+    }
