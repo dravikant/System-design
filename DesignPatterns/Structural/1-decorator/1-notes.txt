@@ -2,3 +2,97 @@ adding new behaviour without altering structure/subclassing
 
 can add new members (data or methods) without changing interface
 
+this is to avoid class explosion
+
+base is constant and toppings/features can be added any no of times
+
+questions
+
+design coffee machine, pizza cost calculation LLD
+
+
+how to
+
+define base interface/abstract class like pizza coffee 
+
+also define the base types such as margaritta pizza, PepperoniPizza etc 
+
+then define decorator interface/class inheriting the base interface/class
+
+decorator has a base object + it is also a base entity as it inheriting base interface/class
+
+--> Has a and Is a relationship
+
+then define the toppings/features inheriting the decorator 
+
+
+===================================
+
+
+*base abstract class
+
+public abstract class BasePizza{
+
+    public abstract int cost();
+}
+
+
+*base types
+
+public class PepperoniPizza extends BasePizza{
+    @override
+    public int cost(){
+        return 200;
+    }
+}
+
+public class FarmVillaPizza extends BasePizza{
+    @override
+    public int cost(){
+        return 250;
+    }
+}
+
+*decorator is a and has a 
+
+public abstract class ToppingDecorator extends BasePizza {
+
+}
+
+*defone concrete decorators
+
+public class ExtraCheese extends ToppingDecorator {
+
+    private BasePizza basepizza;
+
+    publci ExtraCheese(BasePizza pizza){
+        basepizza = pizza;
+    }
+
+    @override
+    public int cost(){
+        return basepizza.cos() + 10;
+    } 
+}
+
+public class Mushroom extends ToppingDecorator {
+
+    private BasePizza basepizza;
+
+    publci Mushroom(BasePizza pizza){
+        basepizza = pizza;
+    }
+
+    @override
+    public int cost(){
+        return basepizza.cos() + 15;
+    } 
+}
+
+
+client say wants FarmVillaPizza with ExtraCheese and Mushroom
+
+
+ mypizza = new Mushroom(new ExtraCheese(new FarmVillaPizza()));
+
+ mypizza.cost()
