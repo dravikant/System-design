@@ -71,3 +71,81 @@ public Directory implements FileSystem {
         movieDirectory.ls();
 
 
+Example 2
+
+Arithmetic expression
+
+
+public interface ArithmeticExpression {
+    public int evaluate();
+}
+
+leaf node 
+
+public class Number implements ArithmeticExpression {
+
+    int value;
+
+    public Number(int value){
+        this.value = value;
+    }
+
+    public int evaluate (){
+        System.out.println("Number value is :" + value);
+        return value;
+    }
+}
+
+
+//enum for operation
+
+public enum Operation {
+
+    ADD,
+    SUBTRACT,
+    MULTIPLY,
+    DIVIDE;
+}
+
+
+//composite
+
+public class Expression implements ArithmeticExpression{
+    ArithmeticExpression leftexpression;
+    ArithmeticExpression rightexpression;
+    Operator operator;
+
+    public Expression(ArithmeticExpression leftexpression, ArithmeticExpression rightexpression, Operation operator){
+         this.leftExpression = leftPart;
+        this.rightExpression = rightPart;
+        this.operator = operator;
+
+    }
+
+
+    public int evaluate(){
+
+           int value = 0;
+        switch (operation){
+
+            case ADD:
+                value = leftExpression.evaluate() + rightExpression.evaluate();
+                break;
+            case SUBTRACT:
+                value = leftExpression.evaluate() - rightExpression.evaluate();
+                break;
+            case DIVIDE:
+                value = leftExpression.evaluate() / rightExpression.evaluate();
+                break;
+            case MULTIPLY:
+                value = leftExpression.evaluate() * rightExpression.evaluate();
+                break;
+        }
+
+     System.out.println("Expression value is :" + value);
+        return value;
+
+    }
+}
+
+
