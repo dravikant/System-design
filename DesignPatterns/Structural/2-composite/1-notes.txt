@@ -1,0 +1,73 @@
+used whenever there is a tree like structure
+
+or object inside object
+
+e.g. filesystem (directory has directory of file and so on)
+calculator (expression has subexpression or value)
+
+
+there is a leaf i.e. file in filesystem or value in an expression 
+
+solution 
+
+have both leaf and Composite implement the component interface also composite has object of component
+
+public interface FileSystem {
+
+    public void ls();
+}
+
+//leaf class
+
+public class File implements FileSystem {
+    String filename;
+
+    public File(string filename){
+        this.filename = filename
+    }
+
+    public void ls(){
+        System.out.Println("file name " + fileName);
+    }
+}
+
+//composite
+
+public Directory implements FileSystem {
+    String directoryname;
+    List<FileSystem> filesystemlist;
+
+    public Directory(string directoryname){
+        this.directoryname = directoryname;
+        this.filesystemlist = new ArrayList<FileSystem>;
+    }
+
+    public void add(FileSystem filesystemobj){
+        filesystemlist.add(filesystemobj);
+    }
+
+    public void ls(){
+        System.out.Println("directory name " + directoryname);
+
+        for(filesystemobj filesystemobj : filesystemlist){
+            filesystemobj.ls();
+        }
+    }
+
+}
+
+//client / main 
+
+       Directory movieDirectory = new Directory("Movie");
+
+        FileSystem border = new File("Border");
+        movieDirectory.add(border);
+
+       Directory comedyMovieDirectory = new Directory("ComedyMovie");
+       File hulchul = new File("Hulchul");
+        comedyMovieDirectory.add(hulchul);
+        movieDirectory.add(comedyMovieDirectory);
+
+        movieDirectory.ls();
+
+
