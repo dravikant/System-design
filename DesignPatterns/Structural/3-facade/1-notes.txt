@@ -1,0 +1,97 @@
+whenever we want to hide system complexity from the client
+
+has the responsibility of creating objects to hide the compleixyt 
+
+client is not forced to use facade
+
+example 
+
+
+public class EmployeeDAO{   //DAO -- data access objects
+
+    public void insert(){
+
+    }
+
+    public void updateEmployeeName(){
+
+    }
+
+    public Employee getEmployeeDetails(int id){
+
+
+        
+    }
+
+    public Employee getEmployeeDetails(String email){
+        
+    }
+
+    ....
+    //many other methods
+}
+
+
+public class EmployeeFacade{
+
+// facade takes responsibility of creating objects of all components it interacts (it can be multiple)
+    EmployeeDAO employeeDAO;    
+
+
+// and only expose those methods which client may require
+
+    public EmployeeFacade(){
+        employeeDAO = new EmployeeDAO();
+    }
+
+    public void insert(){
+        employeeDAO.insert();
+    }
+
+    public Employee getEmployeeDetails(int empId){
+
+    }
+}
+
+
+
+//Client has facade objects
+
+public class EmployeeClient{
+
+    public void getEmployeeDetails(){
+        EmployeeFacade employeeFacade = new EmployeeFacade();
+        employeeFacade.getEmployeeDetails(1234);
+    }
+}
+
+
+//example 2
+
+say we have multiple class
+
+ProductDAO, Pyament Invoice, SendNotifcation
+
+
+
+public clas OrderFacade {
+
+    ProductDAO productDAO;
+    Invoice invoice;
+    Payment payment;
+    SendNotifcation sendNotification;
+
+    public OrderFacade(){
+        productDAO = new ProductDAO();
+        invoice = new Invoice();
+        payment = new Payment();
+        sendNotification = New SendNotifcation();
+    }
+
+    public void createorder(){
+        Product = productDAO.getOrder();
+        payment.makePayment();
+        invoice.getInwardRemmitance();
+        sendNotification.send();
+    }
+}
