@@ -1,0 +1,49 @@
+used in case where we need
+
+1. access restrictions (proxy will have blocked list)
+2. caching (proxy will check if data is there in cache to avoid call to actual object)
+3. pre and post processing (like logging, formatting, notify, publish event, centralised logging etc)
+
+there can be n proxy layers one after the other
+
+public interface employeetable{
+    create
+    delete
+    get
+}
+
+public class EmployeeTableImpl{
+
+    create(){
+
+        ..
+        ..
+    }
+
+    delete(){
+        ..
+        ..
+    }
+
+    get(){
+        ..
+        ..
+    }
+}
+
+public class EmployeeTableProxy implements EmployeeTable {  //is a 
+
+    EmployeeTableImpl employeeTableImpl; // has a
+
+    create(){
+        ..
+
+        if(client.role == "ADMIN" ){
+            employeeTableImpl.creat()
+        }
+    }
+
+..
+..
+
+}
