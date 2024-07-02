@@ -1,0 +1,32 @@
+Bridge design pattern decouples an interface from its implementation so that the two can vary independently
+
+Pretty much similar to strategy pattern only intent is different (code and uml wise same)
+
+
+public abstract class LivingThing{
+    public void breath()
+}
+
+some creatures might very well have the same breathing strategy so instead have it as separate interface and have an object of it
+
+
+public interface breathingstratgey{
+    public void breathe()
+}
+
+public airbreathe implements Breathingstratgey{
+    ...
+}
+
+
+public class Dog implements LivingThing{
+   Breathingstratgey breathingstratgey;
+
+   public Dog(Breathingstratgey breathingstratgey){
+    this.breathingstratgey = breathingstratgey
+   }
+
+   public void breath(){
+    this.breathingstratgey.breath()
+   }
+}

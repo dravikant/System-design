@@ -1,0 +1,164 @@
+Questions:
+
+Design word processor/text editor
+Design game 
+
+--> its main purpose is to reduce memory usage by sharing data amoing multiple objects
+
+
+//Gaming scenario
+
+public class Robot{
+    int xcoord;
+    int ycoord;
+    String type; 
+    Sprites body; // picture .. heavy object
+
+    public Robot(int x, int y, String type, Sprite body){
+        ..
+        ..
+        ..
+    }
+}
+
+public static void main(){
+    int x,y;
+
+    for(int i=0;i<5000000;i++){
+        Sprites humonoidSprites = new Sprites(); //image is same
+        Robot HuanoidRobot = new Robot(x+1, y+1,"HUMONOID" ,humonoidSprites) //type is same
+    }
+
+
+    for(int i=0;i<5000000;i++){
+        Sprites dogSprites = new Sprites();
+        Robot dogRobot = new Robot(x+1, y+1,"HUMONOID" ,humonoidSprites)
+    }
+}
+
+total 10lac objects and each object required around 31KB (image size 30KB) so overall 31GB but say system has 25GB
+
+When to use this pattern?
+
+--> memory is limited
+--> When objects share data
+    --> intrinsic data : shared among objects and remain constant after initialised
+    --> extrinsic data : changes based on client input and differs from one object to other
+--> Creation of object is expensive
+
+
+   int xcoord; --> extrinsic data
+    int ycoord;  --> extrinsic data
+    String type; --> intrinsic data
+    Sprites body; // picture .. heavy object --> intrinsic data
+
+How to solve?
+
+-->From the object, remove the extrinsic data and keep intrinsic data
+
+
+for all 5 lac objects type and image are same and only x,y coord change 
+
+--> This Flyweight class can be immutable
+
+i.e. make those intrinsic data fields private and write only getters and not setters
+they are initialised only at the time of initialisation
+
+--> Extrinsic data can be passed as parameter to the class methods
+
+--> Once Flyweight object is created, it is cached and reused whenever required
+
+
+
+solution to Robot problem
+
+public interface IRobot {
+    public void display(int x, int y);
+}
+
+public class HumonoidRobot implement IRobot {
+    private String type;
+    private Sprites body;
+
+    HuanoidRobot(String type, Sprite sprite){
+        this.type = type;
+        this.body = sprites; 
+    }
+
+    //getters
+    getType()
+    getBody()
+
+    @override
+    void display(int x, int y)
+}
+
+public class RoboticDog implement IRobot {
+    private String type;
+    private Sprites body;
+
+    RoboticDog(String type, Sprite sprite){
+        this.type = type;
+        this.body = sprites; 
+    }
+
+    //getters
+    getType()
+    getBody()
+
+    @override
+    void display(int x, int y)
+
+}
+
+
+public class RoboticFactory{
+    Map<String,IRobot> robotCache = new HashMap<>();
+
+    public static IRobot createRobot(String Robottype){
+
+
+        if( robotCache.contains(Robottype)){
+            return robotCache[Robottype];
+        }
+        else{
+            if(robotType == "HUMANOID"){
+                Sprites humanoidSprite = new Sprites();
+                IRobot humanoidObject = new HumanoidRobot(robotType, humanoidSprite);
+                robotCache.put(robotType, humanoidObject);
+                return humanoidObject;
+            }
+            else if(robotType == "ROBOTICDOG"){
+                Sprites roboticDogSprite = new Sprites();
+                IRobot roboticDogObject = new RoboticDog(robotType, roboticDogSprite);
+                robotCache.put(robotType, roboticDogObject);
+                return roboticDogObject;
+            }
+
+        }
+
+    }
+}
+
+
+
+
+public static void main(String args[]){
+
+        IRobot humanoidRobot1 = RoboticFactory.createRobot("HUMANOID");
+        humanoidRobot1.display(1,2);
+
+
+        IRobot humanoidRobot2 = RoboticFactory.createRobot("HUMANOID");
+        humanoidRobot2.display(10,30);
+
+        IRobot roboDog1 = RoboticFactory.createRobot("ROBOTICDOG");
+        roboDog1.display(2,9);
+
+        IRobot roboDog2 = RoboticFactory.createRobot("ROBOTICDOG");
+        roboDog2.display(11,19);
+
+    }
+
+
+interface --> concrete classes with intrinsci data --> factory with cache --> driver 
