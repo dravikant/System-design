@@ -1,0 +1,15 @@
+client talks to compatible things and wants to talk to incompatible thing
+
+|
+|
+
+interface is compatible things
+
+--
+
+class is incompatible
+
+--> adapter is compatible thing and has the incompatible thing
+
+
+it delegates call from the client to the incompatible thing
