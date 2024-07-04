@@ -1,0 +1,38 @@
+used when we have to make copy/clone of the existing object
+
+if client has to do it 
+
+
+Student s1 = new Student();
+..
+..
+..
+
+
+
+Student s2 = new Student();
+s2.name = s1.name;
+..
+..
+... n attributes to copy
+
+rather push the responsibiity to the class itself
+
+public interface Prototype {
+
+    public Prototype clone();
+}
+
+
+public class Student {
+    int age;
+    String name;
+    String address;
+    ..
+    ..
+    ..
+     public Student clone(){
+        return new Student(age,name,address,..,..,..)
+     }
+}
+    

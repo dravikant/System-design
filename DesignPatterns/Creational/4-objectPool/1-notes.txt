@@ -1,0 +1,190 @@
+Manages pool of reusable objects like DBConnection
+
+Borrow from the pool --> use it --> return to the pool
+
+Advantages:
+1. reduce the overhead of creation/deletion
+2. reduces latency (as it avoids initialisation)
+3. avoids resource intensive object creation
+
+
+But has added overhead of locking requirement/ thread safety
+
+Client --> 
+
+has a  -->
+
+ResourceManager has
+
+List<Resources> freelist;
+List<Resources> inUselist;
+int INITIAL_POOL_SIZE;
+int MAX_POOL_SIZE;
+
++ getResource()
++ releaseResource()
+
+
+
+has a  -->
+
+---> Resource
+
+
+
+=================
+
+Example
+
+
+-->Resource
+
+public class DBConnection {
+    Connection mysqlconnection;
+
+    DBCOnnection(){
+        try{
+
+            mysqlconnection = DriverManager.getConnection("url",username,password);
+
+        }catch(Exception e){
+
+        }
+    }
+}
+
+
+ResourceManager
+
+public class DBConnectionPoolManager{
+    List<DBCOnnection> freelist;
+    List<DBCOnnection> inUSeList;
+
+    int INITIAL_POOL_SIZE = 3;
+    int MAX_POOL_SIZE = 6;
+
+    public DBConnectionPoolManager{
+        for(int i=0;i<INITIAL_POOL_SIZE;i++){
+            freelist.add(new DBCOnnection());
+        }
+    }
+
+    public DBConnection getConnection(){
+
+        if(freelist.size() == 0  && inUSeList.size()< MAX_POOL_SIZE){
+            freelist.add(new DBCOnnection);
+            System.out.Println("created new connection");
+        }
+
+        else if(freelist.size()==0 && inUselist.size()>= MAX_POOL_SIZE){
+            System.out.Println("all connections are in use");
+            return null;
+        }
+
+        DBCOnnection dbconnection = freelist.remove(freelist.size()-1);
+        inUSeList.add(dbconnection);
+        return dbconnection;
+    }
+
+    public void releaseConnection(DBCOnnection dbconnection){
+        inUSeList.remove(dbconnection);
+        System.out.Println("created new connection");
+        freelist.add(dbconnection);
+        return;
+    }
+
+}
+
+
+Client
+
+public static void main(){
+
+    DBConnectionPoolManager dbConnectionPoolManager = new DBConnectionPoolManager();
+
+    DBCOnnection dbconnection1 = dbConnectionPoolManager.getConnection();
+    DBCOnnection dbconnection2 = dbConnectionPoolManager.getConnection();
+    DBCOnnection dbconnection3 = dbConnectionPoolManager.getConnection();
+    DBCOnnection dbconnection4 = dbConnectionPoolManager.getConnection();
+    
+    dbConnectionPoolManager.releaseConnection(dbconnection1)
+    
+
+}
+
+
+Porblems with DBConnectionPoolManager implementation
+
+client can create mulitple objects of DBConnectionPoolManager -- so those many * MAX_POOL_SIZE connections can be created
+
++ the implementation needs to be thread safety
+
+Object pool design pattern is used with singleton design pattern and requires thread safe implementation
+while acquiring and releasing the resource
+
+
+
+Updated singleton and synchronised implementation
+
+
+public class DBConnectionPoolManager{
+    List<DBCOnnection> freelist;
+    List<DBCOnnection> inUSeList;
+
+    int INITIAL_POOL_SIZE = 3;
+    int MAX_POOL_SIZE = 6;
+
+    //singleton instanceof
+    private static DBConnectionPoolManager dbConnectionPoolManagerInstance = null;
+
+
+    //constructor is marked as private
+    private DBConnectionPoolManager{
+        for(int i=0;i<INITIAL_POOL_SIZE;i++){
+            freelist.add(new DBCOnnection());
+        }
+    }
+
+    //public getInstance method
+    public static DBConnectionPoolManager getInstance(){
+        if(dbConnectionPoolManagerInstance == null){
+            synchronised (dbConnectionPoolManager.class){
+                 if(dbConnectionPoolManagerInstance == null){
+                    dbConnectionPoolManagerInstance = new DBConnectionPoolManager();
+                 }
+            }
+        }
+
+        return dbConnectionPoolManagerInstance;
+    }
+
+
+    //method is dynchronised
+    public synchronised DBConnection getConnection(){
+
+        if(freelist.size() == 0  && inUSeList.size()< MAX_POOL_SIZE){
+            freelist.add(new DBCOnnection);
+            System.out.Println("created new connection");
+        }
+
+        else if(freelist.size()==0 && inUselist.size()>= MAX_POOL_SIZE){
+            System.out.Println("all connections are in use");
+            return null;
+        }
+
+        DBCOnnection dbconnection = freelist.remove(freelist.size()-1);
+        inUSeList.add(dbconnection);
+        return dbconnection;
+    }
+
+    //method is dynchronised
+    public synchronised void releaseConnection(DBCOnnection dbconnection){
+        inUSeList.remove(dbconnection);
+        System.out.Println("created new connection");
+        freelist.add(dbconnection);
+        return;
+    }
+
+}
+
+
