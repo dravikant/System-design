@@ -1,0 +1,5 @@
+goal is to separate creation of objects from main program
+
+factory lets you have all the object creation logic at one place
+
+so in case there is any change, then we dont need to change at multiple places.
