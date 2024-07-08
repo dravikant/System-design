@@ -27,3 +27,76 @@ pattern
 represent sequential check as chain of handlers
 
 each handler handles only one check and passes on the responsibility
+
+
+design ATM vending machine 
+design logger
+
+
+
+
+Client ---> <<abstract>> Handler  with method handleRequest()---> call nexthandler
+
+---> concrete handlers
+
+handler1 handler2 .. handlern
+
+
+logger(INFO,"msg")
+logger(DEBUG,"msg")
+logger(ERROR,"msg")
+
+
+public abstract LogProcessro{
+    public static int INFO =1;
+    public static int DEBUG =2;
+    public static int ERROR =3;
+
+    //has a nextprocessor
+    LogProcessor nextLogProcessor;
+
+    //constructor receives nextlogprocessor
+    LogProcessro(LogProcessro nextLogProcessro){
+        this.nextlogprocessor = newxtlogprocessor;
+    }
+
+    public void log(int loglevel, String message){
+
+        //handling request
+
+        if(nextlogprocessor != null){
+            nextlogprocessor.log(loglevel,msg);
+        }
+    }
+
+
+
+}
+
+
+
+Info log processor
+
+public class InfoLogProcessro extends LogProcessor{
+   
+    LogProcessro(LogProcessro nextLogProcessro){
+        super(nextLogProcessro);
+    }
+
+    public void log(int loglevel, String message){
+
+      if(loglvel== INFO){
+        System.out.Println("INFO:"+msg);
+      }
+
+      else{
+        super.log(loglevel,msg)
+      }
+    }
+
+
+
+}
+
+
+

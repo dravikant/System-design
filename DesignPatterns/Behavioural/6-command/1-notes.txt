@@ -1,0 +1,210 @@
+Command design pattern
+
+separates logic of
+
+-Receiver
+-Invoker
+-Command
+
+imagine a copy command for a text editor 
+
+all three options i.e. edit button + right click shortcut + ctrl+c shortcut
+
+have to implement same logic 
+
++ if we have to implement undo support it will be overkill
+
+
+The Command pattern suggests that GUI objects shouldn’t send  requests directly to buisness logic.
+Instead, you should extract all of the request details, such as
+ the object being called, 
+ the name of the method and
+  the list of arguments 
+  
+  into a separate command class with a single method that triggers this request.
+
+Command objects serve as links between various GUI and business logic objects.
+ From now on, the GUI object doesn’t need to know what business logic object will receive the request and 
+ how it’ll be processed. The GUI object just triggers the command, which handles all the details.
+
+
+e.g.
+
+1. Abstraction
+
+in obiee, the export functionality just triggers a export pdf/csv/excel triggers export command
+however there are lot of details required like timezone currency alignment etc 
+Client should not be bothered about these details 
+
+2. Undo/Redo functionality
+
+3 code maintenance would be nightmare if client has to keep track of business logic
+
+we have dashbord / report etc 
+
+
+
+invoker ---> command --> Receiver
+
+
+*Receiver
+
+public class AirConditioner{
+
+    bool isOn;
+    int temperature;
+
+    public void turnOnAC(){
+        isOn = true;
+        System.out.Println("AC is ON");
+    }
+
+    public void turnOffAC(){
+        isOn = false;
+        System.out.Println("AC is OFF");
+    }
+
+    public void setTemperature(int temp){
+        this.temperature = temp;
+        System.out.Println("temperature is set to"+this.temperature);
+    }
+
+}
+
+
+
+*Command
+
+
+public Interface ICommand{
+
+    public void execute();
+
+    public void undo();   ==> what to do for set temperature
+}
+
+
+public class TurnOnACCommand implements ICommand {
+
+    AirConditioner ac;
+    TurnOnACCommand(AirConditioner ac){
+        this.ac= ac;
+    }
+
+    @override
+    public void execute(){
+        ac.turnOnAC();
+    }
+
+
+    @override
+    public void undo(){
+        ac.turnOFFAC();
+    }
+}
+
+
+
+public class TurnOFFACCommand implements ICommand {
+
+    AirConditioner ac;
+    TurnOFFACCommand(AirConditioner ac){
+        this.ac= ac;
+    }
+
+    @override
+    public void execute(){
+        ac.turnOFFAC();
+    }
+
+
+    @override
+    public void undo(){
+        ac.turnONAC();
+    }
+}
+
+
+public class setTempACCommand implements ICommand {
+
+    AirConditioner ac;
+    int temperature;
+    int prevtemp;
+
+    SettempACCommand(AirConditioner ac, int temp){
+        this.ac= ac;
+        this.prevtemp = ac.getTemperature();
+        this.temperature = temp;
+    }
+
+    @override
+    public void execute(){
+        ac.setTemperature(this.temperature);
+    }
+
+    @override
+    public void undo();{
+        ac.setTempACCommand(this.prevtemp);
+    }
+
+}
+
+
+if some business logic changes then only te particular command class will get changed.
+
+
+*Invoker
+
+
+public class MyRemoteControl {
+
+    ICommand command;
+
+
+    Stack<ICommand> acCommandHistory = new Stack();
+
+    MyRemoteControl(){
+
+    }
+
+    public void setCommand(ICommand command){
+        this.command = command;
+
+    }
+
+    public void pressButton(){
+        command.excute();
+        acCommandHistory.add(this.command)
+    }
+
+    public void undo(){
+        if(!acCommandHistory.empty()){
+            command = acCommandHistory.pop();
+            command.undo();
+        }
+    }
+
+}
+
+
+
+* client
+
+
+public class Main {
+
+    public static void main(String args[]){
+
+
+        AirConditioner ac = new AirConditioner();
+
+        MyRemoteControl remote = new MyRemoteControl();
+
+        remote.setCommand(new TurnOnACCommand(ac));
+
+        remote.pressButton();
+
+    }
+}
+
+this assumes that remote has only 1 button

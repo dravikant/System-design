@@ -1,0 +1,53 @@
+design vending machine 
+
+there are finite states and each state allows only finite operations .. statewise operations
+
+e.g. for vending machine
+
+State                                   Operations
+
+Idle state -->      Press Accept cash button
+
+Accept cash -->     Insert coins
+                    Select Product
+                    Refund cash
+
+Select Product -->  Dispense Product
+                    Refund cash
+                    return extra cash
+
+Dispense Product --> Dispense Product
+
+
+Similar example TV
+
+OFF --> power on
+
+ON  --> change volume
+        change channel
+        power off
+
+
+Implementation
+===============
+
+Product (object) has a state
+
+
+define state as an interface and it has all possible operations
+
+then define the concrete states as classes implementing this interface
+
+and then in each state only implement the ones which are allowed in the current state
+
+and for the rest have a default behaviour or throw an exception
+
+
+
+
+public interface State{
+
+    public void 
+}
+
+

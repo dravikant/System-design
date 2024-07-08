@@ -1,0 +1,109 @@
+Used when only one instance of the class is required
+
+
+4 ways to achieve this
+
+1. Eager
+2. Lazy
+3. Synchornized method
+4. Double locking --> used in the industry
+
+
+1. Eager 
+
+public class DBConnection {
+    
+    //eager initialisation --> done at the time of class loading 
+    private static DBConnection = new DBCOnnection();
+
+    //make constructor private
+    private DBCOnnection(){
+
+    }
+
+    public DBCOnnection getInstance(){
+        return DBCOnnection;
+    }
+}
+
+
+2. Lazy
+
+public class DBConnection {
+    
+    //lazy initialisation --> null at beginning
+    private static DBConnection ;
+
+    //make constructor private
+    private DBCOnnection(){
+
+    }
+
+    public DBCOnnection getInstance(){
+
+        if (dbconnection == NULL){
+            dbconnection = new DBCOnnection();
+        }
+        return DBCOnnection;
+    }
+}
+
+problem with LAzy that if mulitple threads simultaneously found obj null may create multiple obj
+
+solution : synchronised
+
+3. synchronised
+
+
+public class DBConnection {
+    
+    //lazy initialisation --> null at beginning
+    private static DBConnection ;
+
+    //make constructor private
+    private DBCOnnection(){
+
+    }
+
+    //method is synchornized
+
+    public synchornized DBCOnnection getInstance(){
+
+        if (dbconnection == NULL){
+            dbconnection = new DBCOnnection();
+        }
+        return DBCOnnection;
+    }
+}
+
+
+synchornized is very expensive because each thread puts a lock on top of the method
+
+
+4. Double locking
+
+
+public class DBConnection {
+    
+    //lazy initialisation --> null at beginning
+    private static DBConnection ;
+
+    //make constructor private
+    private DBCOnnection(){
+
+    }
+
+    public DBCOnnection getInstance(){
+
+        if (dbconnection == NULL){
+
+            synchornized( DBCOnnection.class  ){
+                if (dbconnection == NULL){
+                    dbconnection = new DBCOnnection();
+                }
+            }
+                
+        }
+        return DBCOnnection;
+    }
+}
